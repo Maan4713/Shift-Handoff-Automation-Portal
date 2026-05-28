@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STN - Shift Handoff Automation Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#2563eb', // STN Primary Blue
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e3a8a', // STN Dark Blue
+              900: '#1e3a8a',
+            },
+            slate: {
+              950: '#0f172a', // STN Background
+              900: '#111827', // STN Card Background
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .monospace-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Glow borders matching enterprise style */
+    .glow-border {
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.25);
+    }
+    .dark .glow-border {
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Header -->
+  <header class="w-full py-6 px-4 border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <!-- STN Dynamic Logo Icon -->
+        <div class="relative w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-950"></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-black tracking-wider text-slate-900 dark:text-white">STN</h1>
+            <span class="px-2 py-0.5 text-xs font-semibold uppercase tracking-wider rounded bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300">NOC Operations</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Shift Handoff Automation Portal</p>
+        </div>
+      </div>
+
+      <!-- Theme & Live Indicators -->
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-slate-600 dark:text-slate-300">COMPLIANCE MODE: ENFORCED</span>
+        </div>
+        
+        <button id="themeToggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all duration-200" aria-label="Toggle Theme">
+          <i id="themeIcon" class="fas fa-moon text-lg"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Input Panel (Left) -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 transition-all duration-300">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+              <i class="fas fa-file-invoice text-primary-500 text-xl"></i>
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Form Inputs</h2>
+            </div>
+            <button id="btnReset" class="text-xs font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-rose-50 dark:hover:bg-rose-950/30">
+              <i class="fas fa-undo"></i> Reset Form
+            </button>
+          </div>
+
+          <form id="handoffForm" class="space-y-6" onsubmit="event.preventDefault();">
+            
+            <!-- A & B: Queue and Reassignment -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="queueStatus" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Queue Status</label>
+                <div class="relative">
+                  <select id="queueStatus" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer">
+                    <option value="Queue Cleared">Queue Cleared</option>
+                    <option value="Queue Pending">Queue Pending</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="ticketReassignment" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Ticket Reassignment</label>
+                <div class="relative">
+                  <select id="ticketReassignment" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer">
+                    <option value="All tickets reassigned">All tickets reassigned</option>
+                    <option value="Pending reassignment">Pending reassignment</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- C & D: Analysts -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="outgoingAnalyst" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Outgoing Analyst</label>
+                <div class="relative">
+                  <select id="outgoingAnalyst" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer">
+                    <!-- Javascript generated options -->
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="incomingAnalyst" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Incoming Analyst</label>
+                <div class="relative">
+                  <select id="incomingAnalyst" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer">
+                    <!-- Javascript generated options -->
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- E: Ticket Created Segment with extraction intelligence -->
+            <div class="bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-sm font-bold text-slate-800 dark:text-white">Tickets Created</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Extracts IDs and formats description automatically</p>
+                </div>
+                <!-- Toggle Button -->
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="ticketToggle" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-300 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary-500"></div>
+                </label>
+              </div>
+
+              <!-- Ticket pasting segment -->
+              <div id="ticketsArea" class="hidden space-y-3 transition-all duration-300">
+                <textarea id="ticketList" rows="4" placeholder="Paste raw tickets here. Examples:&#10;STNHD-88051 | Security updates on Dev Environment&#10;INC123456 Security updates on QA" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-xs monospace-font focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
+                <p class="text-[11px] text-slate-400 italic">Supports multiple formats. Matches ticket identifiers and pairs them with any descriptions found on the line.</p>
+              </div>
+            </div>
+
+            <!-- F, G & H: Routing Verification -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="callRouting" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Verified Routing?</label>
+                <div class="relative">
+                  <select id="callRouting" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Support Number</label>
+                <div class="flex items-center bg-slate-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800/70 rounded-xl px-4 py-3 text-slate-500 text-xs select-none">
+                  <i class="fas fa-phone mr-2"></i>
+                  <span>+1 (866) 459-0642</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Option Number</label>
+                <div class="flex items-center bg-slate-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800/70 rounded-xl px-4 py-3 text-slate-500 text-xs select-none">
+                  <i class="fas fa-hashtag mr-2"></i>
+                  <span>2</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- I: Additional Notes -->
+            <div>
+              <label for="additionalNotes" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Additional Notes</label>
+              <textarea id="additionalNotes" rows="3" placeholder="Enter any other handover context..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Live Preview & Document Output (Right) -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-xl border border-slate-200 dark:border-slate-800 glow-border flex flex-col h-full min-h-[550px]">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Document Preview</h2>
+            </div>
+            
+            <!-- Format Switcher -->
+            <div class="flex bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-medium">
+              <button id="viewRich" class="px-3 py-1.5 rounded-md bg-white dark:bg-slate-800 shadow-sm text-primary-500 dark:text-white font-bold transition-all">Rich Document</button>
+              <button id="viewRaw" class="px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all">Raw Output</button>
+            </div>
+          </div>
+
+          <!-- Document Box -->
+          <div class="flex-grow flex flex-col bg-slate-50 dark:bg-slate-950 rounded-xl p-6 border border-slate-200 dark:border-slate-900/50 relative min-h-[400px]">
+            
+            <!-- 1. Rich Document View (Matches exact bold font weights & styles from Screenshot) -->
+            <div id="richPreview" class="text-slate-800 dark:text-slate-100 text-sm leading-relaxed space-y-4 select-all break-words" contenteditable="true" style="font-family: Arial, sans-serif;">
+              <!-- Javascript injects formatted HTML directly here -->
+            </div>
+
+            <!-- 2. Raw Text Code Block (Hidden by default, for simple raw plain text viewing) -->
+            <pre id="rawPreview" class="hidden text-xs text-slate-700 dark:text-slate-300 whitespace-pre-wrap flex-grow overflow-y-auto monospace-font select-all leading-relaxed"></pre>
+
+            <!-- Bottom Instructions -->
+            <div class="mt-4 pt-3 border-t border-slate-200 dark:border-slate-900 text-[10px] text-slate-400 flex items-center justify-between">
+              <span><i class="fas fa-keyboard mr-1"></i> Preview box above is editable</span>
+              <span><i class="fas fa-magic mr-1"></i> Styled to copy-paste cleanly</span>
+            </div>
+          </div>
+
+          <!-- Operation Controls -->
+          <div class="grid grid-cols-2 gap-3 mt-4">
+            <button id="btnCopy" class="flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 active:scale-[0.98] text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-primary-500/20 transition-all">
+              <i class="far fa-copy text-lg"></i>
+              <span>Copy Handoff</span>
+            </button>
+            <button id="btnDownload" class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-[0.98] text-slate-700 dark:text-slate-200 font-bold py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 transition-all">
+              <i class="fas fa-file-alt text-lg"></i>
+              <span>Download TXT</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Notification Popup Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 z-50">
+    <div class="flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-4 rounded-xl shadow-2xl border border-slate-800 dark:border-slate-200">
+      <div class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white text-xs">
+        <i class="fas fa-check"></i>
+      </div>
+      <div>
+        <p class="font-bold text-sm" id="toastTitle">Success</p>
+        <p class="text-xs text-slate-400 dark:text-slate-600" id="toastMessage">Copied directly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Info Banner -->
+  <div class="bg-primary-50/50 dark:bg-primary-950/10 border-t border-primary-100 dark:border-primary-900/30 py-6 px-4 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div class="flex flex-col sm:flex-row items-center gap-3 text-slate-500 dark:text-slate-400">
+        <div class="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
+          <i class="fas fa-shield-alt text-primary-500 animate-pulse"></i>
+          <span>SYSTEM DISPATCH VERIFIED</span>
+        </div>
+        <span>Support Dispatch Line: <strong class="text-slate-700 dark:text-slate-300">+1 (866) 459-0642 Option 2</strong></span>
+        <span class="hidden sm:inline">|</span>
+        <span>Corporate Phone Extension: <strong class="text-slate-700 dark:text-slate-300">510-455-3565</strong></span>
+      </div>
+      <div class="text-slate-400 dark:text-slate-500 italic">
+        Ensure routing verification is executed at every change of shift window.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <p class="font-medium">&copy; 2026 STN, Inc. All rights reserved. | Developed by Manzoor Ali</p>
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span class="font-bold tracking-wider uppercase text-xs text-slate-400 dark:text-slate-500">Powered by STN Automation</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- State & Dynamic Parsing Controller -->
+  <script>
+    // 1. Analyst Database Definition
+    const analysts = [
+      { name: "Manzoor Ali", email: "manzoor@stninc.com", phone: "510-455-3565" },
+      { name: "Muhammad Talha", email: "talha@stninc.com", phone: "510-455-3565" },
+      { name: "Abdul Rehman Sethi", email: "abdul@stninc.com", phone: "510-455-3565" },
+      { name: "Muhammad Danish", email: "danish@stninc.com", phone: "510-455-3565" },
+      { name: "Adnan Hassan", email: "adnan@stninc.com", phone: "510-455-3565" }
+    ];
+
+    // 2. DOM Selections
+    const htmlEl = document.documentElement;
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const outgoingAnalystSelect = document.getElementById('outgoingAnalyst');
+    const incomingAnalystSelect = document.getElementById('incomingAnalyst');
+    const queueStatusSelect = document.getElementById('queueStatus');
+    const ticketReassignmentSelect = document.getElementById('ticketReassignment');
+    const ticketToggle = document.getElementById('ticketToggle');
+    const ticketsArea = document.getElementById('ticketsArea');
+    const ticketListTextarea = document.getElementById('ticketList');
+    const callRoutingSelect = document.getElementById('callRouting');
+    const additionalNotesTextarea = document.getElementById('additionalNotes');
+    
+    // Preview targets
+    const richPreview = document.getElementById('richPreview');
+    const rawPreview = document.getElementById('rawPreview');
+    const viewRichBtn = document.getElementById('viewRich');
+    const viewRawBtn = document.getElementById('viewRaw');
+
+    // Controls
+    const btnCopy = document.getElementById('btnCopy');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnReset = document.getElementById('btnReset');
+    const toast = document.getElementById('toast');
+    const toastTitle = document.getElementById('toastTitle');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // 3. State Management
+    const STATE_KEY = 'stn_handoff_dashboard_v4';
+    let appState = {
+      queueStatus: 'Queue Cleared',
+      ticketReassignment: 'All tickets reassigned',
+      outgoingAnalystIndex: 0,
+      incomingAnalystIndex: 1,
+      ticketsCreatedEnabled: true, // Default to true to show the extraction ability
+      ticketList: 'STNHD-88051 | Security updates on Dev Environment (April & May)',
+      callRouting: 'Yes',
+      additionalNotes: '',
+      isDarkMode: true,
+      currentView: 'rich' // 'rich' or 'raw'
+    };
+
+    function loadSavedState() {
+      const saved = localStorage.getItem(STATE_KEY);
+      if (saved) {
+        try {
+          appState = { ...appState, ...JSON.parse(saved) };
+        } catch (e) {
+          console.error("Local storage restoration failed", e);
+        }
+      }
+    }
+
+    function saveCurrentState() {
+      localStorage.setItem(STATE_KEY, JSON.stringify(appState));
+    }
+
+    function populateAnalysts() {
+      outgoingAnalystSelect.innerHTML = '';
+      incomingAnalystSelect.innerHTML = '';
+      analysts.forEach((analyst, index) => {
+        const optionOut = document.createElement('option');
+        optionOut.value = index;
+        optionOut.textContent = `${analyst.name} (${analyst.email})`;
+        outgoingAnalystSelect.appendChild(optionOut);
+
+        const optionIn = document.createElement('option');
+        optionIn.value = index;
+        optionIn.textContent = `${analyst.name} (${analyst.email})`;
+        incomingAnalystSelect.appendChild(optionIn);
+      });
+    }
+
+    function syncUiFromState() {
+      queueStatusSelect.value = appState.queueStatus;
+      ticketReassignmentSelect.value = appState.ticketReassignment;
+      outgoingAnalystSelect.value = appState.outgoingAnalystIndex;
+      incomingAnalystSelect.value = appState.incomingAnalystIndex;
+      
+      ticketToggle.checked = appState.ticketsCreatedEnabled;
+      if (appState.ticketsCreatedEnabled) {
+        ticketsArea.classList.remove('hidden');
+      } else {
+        ticketsArea.classList.add('hidden');
+      }
+      
+      ticketListTextarea.value = appState.ticketList;
+      callRoutingSelect.value = appState.callRouting;
+      additionalNotesTextarea.value = appState.additionalNotes;
+
+      // Theme toggle initialization
+      if (appState.isDarkMode) {
+        htmlEl.classList.add('dark');
+        themeIcon.className = 'fas fa-sun text-amber-400 text-lg';
+      } else {
+        htmlEl.classList.remove('dark');
+        themeIcon.className = 'fas fa-moon text-slate-700 text-lg';
+      }
+
+      // Preview tabs switcher update
+      switchViewTab(appState.currentView);
+    }
+
+    function updateStateFromUi() {
+      appState.queueStatus = queueStatusSelect.value;
+      appState.ticketReassignment = ticketReassignmentSelect.value;
+      appState.outgoingAnalystIndex = parseInt(outgoingAnalystSelect.value) || 0;
+      appState.incomingAnalystIndex = parseInt(incomingAnalystSelect.value) || 0;
+      appState.ticketsCreatedEnabled = ticketToggle.checked;
+      appState.ticketList = ticketListTextarea.value;
+      appState.callRouting = callRoutingSelect.value;
+      appState.additionalNotes = additionalNotesTextarea.value;
+
+      saveCurrentState();
+      generateHandoffOutput();
+    }
+
+    // Regular Expression Intelligent Ticket Extraction System
+    // Detects ticket formats such as STNHD-XXXXX, INCXXXXXX, HDXXXXX and matches them against any accompanying comments or sentences.
+    function parseTickets(rawText) {
+      if (!appState.ticketsCreatedEnabled || !rawText.trim()) {
+        return [{ text: 'No Ticket created', isPlaceholder: true }];
+      }
+
+      const lines = rawText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+      const parsedResults = [];
+
+      lines.forEach((line, index) => {
+        // Regex looks for words matching standard IT system tickets like STNHD-88051 or INC123456
+        const ticketPattern = /\b(STNHD-\d+|INC\d+|HD\d+|STNHD\d+)\b/i;
+        const match = line.match(ticketPattern);
+
+        if (match) {
+          const ticketId = match[1].toUpperCase();
+          // Extract remainder description clean of common separators like | or : or -
+          let description = line.replace(ticketPattern, '').trim();
+          description = description.replace(/^[\s\|\:\-\•\d\.\)]+/, '').trim();
+
+          if (description.length > 0) {
+            parsedResults.push({
+              id: ticketId,
+              description: description,
+              index: index + 1
+            });
+          } else {
+            parsedResults.push({
+              id: ticketId,
+              index: index + 1
+            });
+          }
+        } else {
+          // Fallback if no specific code ID matched, output line as-is
+          let cleanLine = line.replace(/^[\s\•\-\d\.\)]+/, '').trim();
+          if (cleanLine.length > 0) {
+            parsedResults.push({
+              customText: cleanLine,
+              index: index + 1
+            });
+          }
+        }
+      });
+
+      if (parsedResults.length === 0) {
+        return [{ text: 'No Ticket created', isPlaceholder: true }];
+      }
+
+      return parsedResults;
+    }
+
+    // Build the high-fidelity presentation format matching both HTML Rich preview & plain text
+    function generateHandoffOutput() {
+      const outAnalyst = analysts[appState.outgoingAnalystIndex] || analysts[0];
+      const inAnalyst = analysts[appState.incomingAnalystIndex] || analysts[0];
+
+      // Formulate Queue Line Text
+      let queueText = '';
+      if (appState.queueStatus === 'Queue Cleared' && appState.ticketReassignment === 'All tickets reassigned') {
+        queueText = 'Support Queue is empty /All other tickets are reassigned';
+      } else if (appState.queueStatus === 'Queue Cleared') {
+        queueText = 'Support Queue is empty /Pending reassignment';
+      } else if (appState.ticketReassignment === 'All tickets reassigned') {
+        queueText = 'Queue Pending /All other tickets are reassigned';
+      } else {
+        queueText = 'Queue Pending /Pending reassignment';
+      }
+
+      // Generate Ticket lines mapping parsed results
+      const ticketsList = parseTickets(appState.ticketList);
+      
+      // -- BUILD RICH HTML (Ensures bold labels + normal weight values matching screenshot) --
+      let htmlTickets = '';
+      if (ticketsList.length === 1 && ticketsList[0].isPlaceholder) {
+        htmlTickets = `• No Ticket created`;
+      } else {
+        htmlTickets = ticketsList.map(item => {
+          if (item.customText) {
+            return `${item.index}. ${item.customText}`;
+          }
+          if (item.description) {
+            return `${item.index}. <strong>${item.id}</strong> | ${item.description}`;
+          }
+          return `${item.index}. <strong>${item.id}</strong>`;
+        }).join('<br>');
+      }
+
+      let htmlNotes = '';
+      if (appState.additionalNotes.trim()) {
+        htmlNotes = `<br><strong>Additional Notes:</strong><br>${appState.additionalNotes.replace(/\n/g, '<br>')}`;
+      }
+
+      const richHtml = `
+<strong>End of Shift Handoff Checklist:-</strong><br>
+${queueText}<br>
+<strong>Outgoing Analyst:</strong> ${outAnalyst.name}<br>
+<br>
+<strong>Tickets created:</strong><br>
+${htmlTickets}<br>
+<br>
+<strong>Next Analyst on Shift</strong><br>
+<strong>Name:</strong> ${inAnalyst.name}<br>
+<strong>Email:</strong> <span class="text-blue-600 dark:text-blue-400 underline">${inAnalyst.email}</span><br>
+<strong>Phone:</strong> <span class="text-blue-600 dark:text-blue-400 underline">${inAnalyst.phone}</span><br>
+Call +1 (866) 459-0642, option 2 to verify call routing is working properly:<br>
+<strong>Verified and working:</strong> ${appState.callRouting}
+${htmlNotes}
+      `.trim();
+
+      richPreview.innerHTML = richHtml;
+
+      // -- BUILD RAW TEXT fallback --
+      let rawTickets = '';
+      if (ticketsList.length === 1 && ticketsList[0].isPlaceholder) {
+        rawTickets = `• No Ticket created`;
+      } else {
+        rawTickets = ticketsList.map(item => {
+          if (item.customText) {
+            return `${item.index}. ${item.customText}`;
+          }
+          if (item.description) {
+            return `${item.index}. ${item.id} | ${item.description}`;
+          }
+          return `${item.index}. ${item.id}`;
+        }).join('\n');
+      }
+
+      let rawNotes = '';
+      if (appState.additionalNotes.trim()) {
+        rawNotes = `\nAdditional Notes:\n${appState.additionalNotes}`;
+      }
+
+      const rawText = 
+`End of Shift Handoff Checklist:-
+${queueText}
+Outgoing Analyst: ${outAnalyst.name}
+
+Tickets created:
+${rawTickets}
+
+Next Analyst on Shift
+Name: ${inAnalyst.name}
+Email: ${inAnalyst.email}
+Phone: ${inAnalyst.phone}
+Call +1 (866) 459-0642, option 2 to verify call routing is working properly:
+Verified and working: ${appState.callRouting}${rawNotes}`.trim();
+
+      rawPreview.textContent = rawText;
+    }
+
+    // Toggle Preview Modes
+    function switchViewTab(tabName) {
+      appState.currentView = tabName;
+      saveCurrentState();
+
+      if (tabName === 'rich') {
+        richPreview.classList.remove('hidden');
+        rawPreview.classList.add('hidden');
+        
+        viewRichBtn.className = 'px-3 py-1.5 rounded-md bg-white dark:bg-slate-800 shadow-sm text-primary-500 dark:text-white font-bold transition-all';
+        viewRawBtn.className = 'px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all';
+      } else {
+        richPreview.classList.add('hidden');
+        rawPreview.classList.remove('hidden');
+
+        viewRichBtn.className = 'px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all';
+        viewRawBtn.className = 'px-3 py-1.5 rounded-md bg-white dark:bg-slate-800 shadow-sm text-primary-500 dark:text-white font-bold transition-all';
+      }
+    }
+
+    // Display Alert Notice Toast
+    function triggerToast(title, message) {
+      toastTitle.textContent = title;
+      toastMessage.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // Complex Copy Utility preserving bold headings for Rich Platforms (Slack, Teams, Mail)
+    function copyFormattedHandoff() {
+      try {
+        // Setup raw and HTML values to place inside clipboard container
+        const rawText = rawPreview.textContent;
+        const htmlText = richPreview.innerHTML;
+
+        // Custom copy method supporting rich text payload injection
+        const listener = function(e) {
+          e.clipboardData.setData('text/html', htmlText);
+          e.clipboardData.setData('text/plain', rawText);
+          e.preventDefault();
+        };
+
+        document.addEventListener('copy', listener);
+        document.execCommand('copy');
+        document.removeEventListener('copy', listener);
+
+        triggerToast("Handoff Copied!", "Rich content formatting preserved for Slack & Teams.");
+      } catch (err) {
+        // Simple clipboard backup fallback
+        navigator.clipboard.writeText(rawPreview.textContent).then(() => {
+          triggerToast("Copied Plaintext", "Clipboard written without rich tags.");
+        }).catch(() => {
+          triggerToast("Manual Copy Required", "Please select preview text manually.");
+        });
+      }
+    }
+
+    function downloadHandoffAsText() {
+      try {
+        const textContent = rawPreview.textContent;
+        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const timestamp = new Date().toISOString().slice(0, 10);
+        const outAnalyst = (analysts[appState.outgoingAnalystIndex] || analysts[0]).name.replace(/\s+/g, '_');
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `STN_Handoff_${outAnalyst}_${timestamp}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        triggerToast("Download Started", "File generated successfully.");
+      } catch (e) {
+        triggerToast("Download Failed", "Browser permissions blocked generating file.");
+      }
+    }
+
+    function resetFormFields() {
+      appState = {
+        queueStatus: 'Queue Cleared',
+        ticketReassignment: 'All tickets reassigned',
+        outgoingAnalystIndex: 0,
+        incomingAnalystIndex: 1,
+        ticketsCreatedEnabled: true,
+        ticketList: '',
+        callRouting: 'Yes',
+        additionalNotes: '',
+        isDarkMode: htmlEl.classList.contains('dark'),
+        currentView: appState.currentView
+      };
+      
+      saveCurrentState();
+      syncUiFromState();
+      generateHandoffOutput();
+      triggerToast("Form Reset", "All input fields cleared.");
+    }
+
+    // Theme toggle switch execution
+    function handleThemeToggle() {
+      const isDark = htmlEl.classList.contains('dark');
+      if (isDark) {
+        htmlEl.classList.remove('dark');
+        themeIcon.className = 'fas fa-moon text-slate-700 text-lg';
+        appState.isDarkMode = false;
+      } else {
+        htmlEl.classList.add('dark');
+        themeIcon.className = 'fas fa-sun text-amber-400 text-lg';
+        appState.isDarkMode = true;
+      }
+      saveCurrentState();
+    }
+
+    // 4. Register Event Listeners
+    function setupListeners() {
+      queueStatusSelect.addEventListener('change', updateStateFromUi);
+      ticketReassignmentSelect.addEventListener('change', updateStateFromUi);
+      outgoingAnalystSelect.addEventListener('change', updateStateFromUi);
+      incomingAnalystSelect.addEventListener('change', updateStateFromUi);
+      callRoutingSelect.addEventListener('change', updateStateFromUi);
+      
+      ticketListTextarea.addEventListener('input', updateStateFromUi);
+      additionalNotesTextarea.addEventListener('input', updateStateFromUi);
+
+      // Handle user manual adjustments directly on the rich editable box
+      richPreview.addEventListener('input', () => {
+        // Keep synced on manual user modifications
+        rawPreview.textContent = richPreview.innerText;
+      });
+
+      // Ticket Toggle switch listener
+      ticketToggle.addEventListener('change', () => {
+        if (ticketToggle.checked) {
+          ticketsArea.classList.remove('hidden');
+          ticketListTextarea.focus();
+        } else {
+          ticketsArea.classList.add('hidden');
+        }
+        updateStateFromUi();
+      });
+
+      themeToggleBtn.addEventListener('click', handleThemeToggle);
+      btnCopy.addEventListener('click', copyFormattedHandoff);
+      btnDownload.addEventListener('click', downloadHandoffAsText);
+      btnReset.addEventListener('click', resetFormFields);
+
+      // Tab selector bindings
+      viewRichBtn.addEventListener('click', () => switchViewTab('rich'));
+      viewRawBtn.addEventListener('click', () => switchViewTab('raw'));
+    }
+
+    // 5. Initial Startup Trigger
+    window.onload = function() {
+      populateAnalysts();
+      loadSavedState();
+      syncUiFromState();
+      setupListeners();
+      generateHandoffOutput();
+    };
+  </script>
+</body>
+</html>
