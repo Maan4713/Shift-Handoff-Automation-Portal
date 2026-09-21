@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,12 +24,12 @@
           },
           colors: {
             stn: {
-              blue: '#1d4ed8',        /* STN Brand Cobalt Blue */
+              blue: '#1d4ed8',
               blueHover: '#1e40af',
               blueLight: '#eff6ff',
               blueBorder: '#bfdbfe',
-              ring: '#2563eb',         /* STN Orbit Circle Color */
-              black: '#0f172a',        /* STN Letter Contour Midnight */
+              ring: '#2563eb',
+              black: '#0f172a',
               charcoal: '#1e293b',
               gray: '#64748b',
               surface: '#ffffff',
@@ -70,12 +70,11 @@
       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Exceptions for fast micro-interactions to prevent lag */
     input, textarea, select, button, .no-theme-delay {
       transition-duration: 160ms !important;
     }
 
-    /* STN Custom Scrollbars */
+    /* Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -101,7 +100,7 @@
       background: #94a3b8;
     }
 
-    /* STN Ambient Grid Patterns */
+    /* Ambient Grids */
     .bg-grid-stn-white {
       background-size: 36px 36px;
       background-image: 
@@ -115,7 +114,7 @@
         linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
     }
 
-    /* Custom select chevrons */
+    /* Select Dropdowns */
     .dark .custom-select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2338bdf8' stroke-width='2.2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
       background-repeat: no-repeat;
@@ -135,15 +134,6 @@
       appearance: none;
     }
 
-    /* Keyframe Animations */
-    @keyframes pulseSubtle {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(1.02); }
-    }
-    .animate-pulse-subtle {
-      animation: pulseSubtle 3s infinite ease-in-out;
-    }
-
     @keyframes rotateToggle {
       0% { transform: rotate(0deg) scale(0.8); }
       100% { transform: rotate(360deg) scale(1); }
@@ -154,25 +144,24 @@
   </style>
 </head>
 
-<body class="h-full bg-white text-slate-800 font-sans antialiased overflow-x-hidden p-3 sm:p-5 lg:p-7 relative transition-colors duration-300">
+<body class="h-full bg-[#060a17] bg-grid-cyber-dark text-slate-100 font-sans antialiased overflow-x-hidden p-3 sm:p-5 lg:p-7 relative transition-colors duration-300">
 
-  <!-- Continuous Network Topology & Cybersecurity Animated Canvas -->
-  <canvas id="cyberNetworkCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full opacity-80 dark:opacity-50 transition-opacity duration-500"></canvas>
+  <!-- Network Canvas -->
+  <canvas id="cyberNetworkCanvas" class="fixed inset-0 pointer-events-none z-0 w-full h-full opacity-50 transition-opacity duration-500"></canvas>
 
-  <!-- Dynamic Ambient STN Blue Subtle Glow Blobs -->
-  <div id="glowBlob1" class="fixed top-0 left-1/4 w-[480px] h-[480px] bg-blue-500/10 dark:bg-blue-600/20 rounded-full blur-[160px] pointer-events-none -z-0"></div>
-  <div id="glowBlob2" class="fixed bottom-0 right-1/4 w-[480px] h-[480px] bg-indigo-500/10 dark:bg-cyan-500/15 rounded-full blur-[160px] pointer-events-none -z-0"></div>
+  <!-- Ambient Glow -->
+  <div id="glowBlob1" class="fixed top-0 left-1/4 w-[480px] h-[480px] bg-blue-600/20 rounded-full blur-[160px] pointer-events-none -z-0"></div>
+  <div id="glowBlob2" class="fixed bottom-0 right-1/4 w-[480px] h-[480px] bg-cyan-500/15 rounded-full blur-[160px] pointer-events-none -z-0"></div>
 
   <div class="max-w-[1600px] mx-auto space-y-6 relative z-10">
 
-    <!-- COMMAND CENTER NAVIGATION HEADER (STN White & Blue Brand) -->
+    <!-- COMMAND CENTER HEADER -->
     <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-2xl bg-white/95 dark:bg-[#0c1322]/85 backdrop-blur-xl border border-slate-200 dark:border-[#1e293b] shadow-stn-card dark:shadow-cyber-card transition-all duration-300">
       
-      <!-- Brand & Identity with STN Logo -->
+      <!-- Brand & Identity with src="logo.jpg" -->
       <div class="flex items-center gap-4">
-        <!-- Logo container with fallback -->
         <div class="w-14 h-14 rounded-xl bg-white dark:bg-[#050813] border border-blue-200 dark:border-[#1e293b] p-1.5 shadow-sm dark:shadow-glow-blue flex items-center justify-center relative overflow-hidden shrink-0 group">
-          <img id="portalLogoImg" src="STN.jpg" alt="STN Logo" class="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; document.getElementById('fallbackLogoIcon').classList.remove('hidden');">
+          <img id="portalLogoImg" src="logo.jpg" alt="STN Logo" class="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; document.getElementById('fallbackLogoIcon').classList.remove('hidden');">
           <div id="fallbackLogoIcon" class="hidden w-full h-full items-center justify-center bg-white border-2 border-blue-600 rounded-lg shadow-inner relative">
             <span class="font-black text-sm tracking-tighter text-slate-900 font-mono">ST<span class="text-blue-600">N</span></span>
           </div>
@@ -197,7 +186,7 @@
       <!-- Telemetry Chip, Live Clocks & Theme Switcher -->
       <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
         
-        <!-- Live UTC & Local Operational Clocks -->
+        <!-- Clocks -->
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-[#050813]/90 border border-slate-200 dark:border-[#1e293b] text-[11px] font-mono shadow-inner">
           <span class="text-slate-500 dark:text-slate-400 uppercase font-semibold">UTC:</span>
           <span id="liveUtcClock" class="text-blue-600 dark:text-cyan-300 font-medium">--:--:--</span>
@@ -206,7 +195,7 @@
           <span id="liveLocalClock" class="text-slate-900 dark:text-white font-medium">--:--:--</span>
         </div>
 
-        <!-- Compliance Live Radar Indicator -->
+        <!-- Compliance Indicator -->
         <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 dark:bg-emerald-950/40 border border-blue-200 dark:border-emerald-500/30 text-blue-700 dark:text-emerald-400 text-xs font-semibold tracking-wide shadow-sm">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -215,18 +204,16 @@
           <span class="hidden sm:inline">COMPLIANCE MODE:</span> ENFORCED
         </div>
 
-        <!-- Animated Light/Dark Mode Switcher -->
+        <!-- Theme Toggle -->
         <button id="themeToggleBtn" type="button" aria-label="Toggle Theme" class="flex items-center gap-1.5 p-2 rounded-xl bg-slate-50 dark:bg-[#0e1628] hover:bg-slate-100 dark:hover:bg-[#16223d] border border-slate-200 dark:border-[#1e293b] text-slate-700 dark:text-slate-200 shadow-sm transition-all duration-300 cursor-pointer active:scale-95 group">
-          <!-- Sun Icon (Active in Dark mode) -->
-          <svg id="themeIconSun" class="w-5 h-5 text-amber-500 hidden group-hover:rotate-45 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="themeIconSun" class="w-5 h-5 text-amber-500 group-hover:rotate-45 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="4" stroke-width="2"></circle>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
           </svg>
-          <!-- Moon Icon (Active in Light mode) -->
-          <svg id="themeIconMoon" class="w-5 h-5 text-blue-600 group-hover:-rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="themeIconMoon" class="w-5 h-5 text-blue-600 hidden group-hover:-rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
           </svg>
-          <span id="themeToggleText" class="text-xs font-mono font-semibold select-none text-blue-700 dark:text-slate-200">LIGHT</span>
+          <span id="themeToggleText" class="text-xs font-mono font-semibold select-none text-slate-200">DARK</span>
         </button>
 
       </div>
@@ -234,10 +221,9 @@
 
     <main class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- LEFT COLUMN: Input Configuration (7 Cols) -->
+      <!-- LEFT COLUMN: Input Console (7 Cols) -->
       <section class="lg:col-span-7 space-y-5 bg-white/95 dark:bg-[#0c1322]/80 backdrop-blur-xl border border-slate-200 dark:border-[#1e293b] rounded-2xl p-5 sm:p-6 shadow-stn-card dark:shadow-cyber-card transition-all duration-300">
         
-        <!-- Section Header -->
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-[#1e293b]/70 pb-3.5">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-cyan-400 shadow-sm dark:shadow-glow-cyan"></div>
@@ -277,7 +263,7 @@
           </div>
         </div>
 
-        <!-- Row 2: Analysts Selection (Multi-Analyst Roster: Manzoor, Talha, Usama, Abdul Rehman, Adnan) -->
+        <!-- Row 2: Analysts Selection -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           
           <!-- OUTGOING ANALYSTS -->
@@ -289,7 +275,6 @@
               <span class="text-[10px] text-blue-700 dark:text-cyan-400 font-mono px-1.5 py-0.5 rounded bg-blue-100/70 dark:bg-cyan-950/60 border border-blue-200 dark:border-cyan-500/20 font-semibold">Up to 2 Analysts</span>
             </div>
             
-            <!-- Outgoing Slot 1 -->
             <div class="space-y-1">
               <span class="text-[11px] text-slate-600 dark:text-slate-400 font-mono">Analyst 1 (Primary):</span>
               <select id="outgoingAnalyst1" class="custom-select w-full bg-white dark:bg-[#050813] border border-slate-300 dark:border-[#1e293b] rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 transition-all shadow-sm">
@@ -301,7 +286,6 @@
               </select>
             </div>
 
-            <!-- Outgoing Slot 2 -->
             <div class="space-y-1">
               <span class="text-[11px] text-slate-600 dark:text-slate-400 font-mono">Analyst 2 (Optional):</span>
               <select id="outgoingAnalyst2" class="custom-select w-full bg-white dark:bg-[#050813] border border-slate-300 dark:border-[#1e293b] rounded-lg px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-600 transition-all shadow-sm">
@@ -324,7 +308,6 @@
               <span class="text-[10px] text-slate-800 dark:text-emerald-400 font-mono px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-emerald-950/60 border border-slate-300 dark:border-emerald-500/20 font-semibold">Up to 2 Analysts</span>
             </div>
 
-            <!-- Incoming Slot 1 -->
             <div class="space-y-1">
               <span class="text-[11px] text-slate-600 dark:text-slate-400 font-mono">Analyst 1 (Primary):</span>
               <select id="incomingAnalyst1" class="custom-select w-full bg-white dark:bg-[#050813] border border-slate-300 dark:border-[#1e293b] rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 transition-all shadow-sm">
@@ -336,7 +319,6 @@
               </select>
             </div>
 
-            <!-- Incoming Slot 2 -->
             <div class="space-y-1">
               <span class="text-[11px] text-slate-600 dark:text-slate-400 font-mono">Analyst 2 (Optional):</span>
               <select id="incomingAnalyst2" class="custom-select w-full bg-white dark:bg-[#050813] border border-slate-300 dark:border-[#1e293b] rounded-lg px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-blue-600 transition-all shadow-sm">
@@ -351,7 +333,7 @@
           </div>
         </div>
 
-        <!-- Row 3: Tickets Created Section with Live Parser -->
+        <!-- Row 3: Tickets Created Section -->
         <div class="bg-slate-50/70 dark:bg-[#050813]/70 border border-slate-200 dark:border-[#1e293b] rounded-xl p-4 space-y-3 shadow-inner">
           <div class="flex items-center justify-between">
             <div>
@@ -364,7 +346,6 @@
               <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Automated regex parsing extracts ticket IDs & subject lines instantly</p>
             </div>
             
-            <!-- Live Parser Indicator -->
             <div class="flex items-center gap-2">
               <span class="text-[11px] font-mono text-slate-500 dark:text-slate-500 uppercase hidden sm:inline font-semibold">Live Parser</span>
               <div class="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-emerald-500 shadow-sm animate-pulse"></div>
@@ -381,7 +362,7 @@ STNHD-98221 NFS Lock Loss Alerts on 3 Hosts (h200-02, h200-05, h200-14)
 STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         </div>
 
-        <!-- Row 4: Call Routing Verification & Support Details -->
+        <!-- Row 4: Call Routing Verification -->
         <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
           <div class="sm:col-span-4 space-y-1.5">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-400">
@@ -431,13 +412,11 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       </section>
 
-      <!-- RIGHT COLUMN: Live Checklist Terminal Preview & Export Suite (5 Cols) -->
+      <!-- RIGHT COLUMN: Preview & Export (5 Cols) -->
       <section class="lg:col-span-5 space-y-4">
         
-        <!-- Live Checklist Terminal Container -->
         <div class="bg-white dark:bg-[#0c1322]/90 border border-slate-200 dark:border-[#1e293b] rounded-2xl p-5 sm:p-6 shadow-stn-card dark:shadow-cyber-card relative flex flex-col justify-between min-h-[620px] backdrop-blur-xl transition-all duration-300">
           
-          <!-- Terminal Upper Bar -->
           <div class="flex items-center justify-between border-b border-slate-200 dark:border-[#1e293b]/80 pb-3.5 mb-4">
             <div class="flex items-center gap-2">
               <span class="w-3 h-3 rounded-full bg-blue-600 inline-block"></span>
@@ -453,29 +432,22 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           <!-- Terminal Content Body -->
           <div class="space-y-4 font-sans text-sm text-slate-700 dark:text-slate-200 flex-1">
             
-            <!-- Checklist Title & Queue Overview -->
             <div>
               <h2 class="font-extrabold text-slate-900 dark:text-white tracking-wide text-base border-b border-blue-100 dark:border-slate-800 pb-1">End of Shift Handoff Checklist:-</h2>
               <p id="previewQueueLine" class="text-blue-700 dark:text-slate-300 text-xs mt-1.5 font-mono font-medium">Support Queue is empty /All other tickets are reassigned</p>
             </div>
 
-            <!-- Outgoing Analyst Section (Dynamic 1 or 2) -->
-            <div id="previewOutgoingSection" class="text-xs text-slate-700 dark:text-slate-200">
-              <!-- Rendered dynamically -->
-            </div>
+            <!-- Outgoing Analyst Section -->
+            <div id="previewOutgoingSection" class="text-xs text-slate-700 dark:text-slate-200"></div>
 
             <!-- Tickets Created Section -->
             <div class="space-y-1.5">
               <p class="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">Tickets created:</p>
-              <div id="previewTicketsList" class="font-mono text-[12px] space-y-1.5 pl-1 text-slate-700 dark:text-slate-300 leading-relaxed max-h-56 overflow-y-auto pr-1">
-                <!-- Populated via script -->
-              </div>
+              <div id="previewTicketsList" class="font-mono text-[12px] space-y-1.5 pl-1 text-slate-700 dark:text-slate-300 leading-relaxed max-h-56 overflow-y-auto pr-1"></div>
             </div>
 
-            <!-- Next Analyst on Shift Section (Dynamic 1 or 2) -->
-            <div id="previewIncomingSection" class="text-xs space-y-1 text-slate-700 dark:text-slate-200 pt-1">
-              <!-- Rendered dynamically -->
-            </div>
+            <!-- Next Analyst on Shift Section -->
+            <div id="previewIncomingSection" class="text-xs space-y-1 text-slate-700 dark:text-slate-200 pt-1"></div>
 
             <!-- Routing Status -->
             <div class="text-xs pt-2 border-t border-slate-200 dark:border-[#1e293b]/50 space-y-1 text-slate-600 dark:text-slate-300">
@@ -483,14 +455,13 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
               <p><span class="font-bold text-slate-900 dark:text-white">Verified and working:</span> <span id="previewRoutingStatus" class="font-bold text-blue-700 dark:text-emerald-400">Yes</span></p>
             </div>
 
-            <!-- Additional Notes if present -->
+            <!-- Additional Notes -->
             <div id="previewNotesContainer" class="hidden text-xs pt-2 border-t border-slate-200 dark:border-[#1e293b]/40 text-slate-600 dark:text-slate-300">
               <p class="font-bold text-slate-900 dark:text-white">Additional Notes:</p>
               <p id="previewNotesText" class="text-slate-600 dark:text-slate-300 italic whitespace-pre-wrap mt-1 pl-2 border-l-2 border-blue-600 dark:border-cyan-500/50"></p>
             </div>
           </div>
 
-          <!-- Bottom Micro Status Strip -->
           <div class="pt-3 mt-4 border-t border-slate-200 dark:border-[#1e293b]/40 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 select-none font-mono">
             <span class="flex items-center gap-1 text-blue-700 dark:text-cyan-400 font-bold">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -501,10 +472,9 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
         </div>
 
-        <!-- ACTION BUTTONS: Copy Handoff, Download PDF & Download TXT -->
+        <!-- ACTION BUTTONS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
           
-          <!-- Copy Handoff Button (STN Blue Brand) -->
           <button id="copyHandoffBtn" type="button" class="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-blue-700 hover:bg-blue-800 active:scale-[0.98] shadow-md hover:shadow-stn-glow transition-all cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
@@ -512,7 +482,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
             <span id="copyBtnText">Copy Handoff</span>
           </button>
 
-          <!-- Download PDF Button (Corporate NOC Shift Report) -->
           <button id="downloadPdfBtn" type="button" class="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-900 dark:text-cyan-200 bg-white dark:bg-[#11192e] hover:bg-blue-50 dark:hover:bg-[#182440] active:scale-[0.98] border-2 border-blue-600 dark:border-cyan-500/40 hover:border-blue-700 shadow-sm transition-all cursor-pointer">
             <svg class="w-4 h-4 text-blue-700 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -520,7 +489,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
             <span>Download PDF</span>
           </button>
 
-          <!-- Download TXT Button -->
           <button id="downloadTxtBtn" type="button" class="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-[#0c1322] hover:bg-slate-200 dark:hover:bg-[#141e33] active:scale-[0.98] border border-slate-300 dark:border-[#1e293b] hover:border-slate-400 dark:hover:border-slate-600 transition-all cursor-pointer">
             <svg class="w-4 h-4 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -529,7 +497,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           </button>
         </div>
 
-        <!-- Feedback Toast Notification Container -->
         <div id="toastNotification" class="transition-all duration-300 opacity-0 pointer-events-none transform translate-y-2 flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl bg-blue-50 dark:bg-emerald-950/90 border border-blue-300 dark:border-emerald-500/60 text-blue-900 dark:text-emerald-300 text-xs font-semibold shadow-2xl">
           <svg class="w-4 h-4 text-blue-700 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -540,7 +507,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       </section>
     </main>
 
-    <!-- Operational Command Footer & Developer Credit Tag -->
+    <!-- Footer -->
     <footer class="pt-4 pb-2 border-t border-slate-200 dark:border-[#1e293b]/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400 font-mono">
       <div class="flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping inline-block"></span>
@@ -563,12 +530,11 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       </div>
     </footer>
 
-    <!-- Hidden Raw Output Buffer for Plain Text Copying -->
     <textarea id="hiddenClipboardBuffer" class="sr-only" aria-hidden="true"></textarea>
   </div>
 
   <script>
-    // Exact Analyst Directory with Verified Emails & Direct Phone Numbers
+    // Analyst Directory
     const ANALYST_DIRECTORY = {
       'Manzoor Ali': { name: 'Manzoor Ali', email: 'manzoor@stninc.com', phone: '+19254009397' },
       'Muhammad Talha': { name: 'Muhammad Talha', email: 'talha@stninc.com', phone: '+1 925 400 8911' },
@@ -577,7 +543,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       'Adnan Hassan': { name: 'Adnan Hassan', email: 'adnan@stninc.com', phone: '+19253998726' }
     };
 
-    // DOM Elements - Inputs
+    // DOM Inputs
     const queueStatusEl = document.getElementById('queueStatus');
     const ticketReassignmentEl = document.getElementById('ticketReassignment');
     const outgoing1El = document.getElementById('outgoingAnalyst1');
@@ -590,7 +556,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
     const optionNumberEl = document.getElementById('optionNumber');
     const additionalNotesEl = document.getElementById('additionalNotes');
 
-    // DOM Elements - Preview
+    // DOM Preview
     const previewQueueLineEl = document.getElementById('previewQueueLine');
     const previewOutgoingSectionEl = document.getElementById('previewOutgoingSection');
     const previewTicketsListEl = document.getElementById('previewTicketsList');
@@ -601,7 +567,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
     const previewNotesTextEl = document.getElementById('previewNotesText');
     const ticketCountBadgeEl = document.getElementById('ticketCountBadge');
 
-    // Action Buttons & Toast Elements
+    // Actions & Clocks
     const copyHandoffBtn = document.getElementById('copyHandoffBtn');
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const downloadTxtBtn = document.getElementById('downloadTxtBtn');
@@ -609,35 +575,34 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
     const toastMessage = document.getElementById('toastMessage');
     const hiddenClipboardBuffer = document.getElementById('hiddenClipboardBuffer');
 
-    // Clocks
     const liveUtcClockEl = document.getElementById('liveUtcClock');
     const liveLocalClockEl = document.getElementById('liveLocalClock');
 
-    // Theme Switcher Elements
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIconSun = document.getElementById('themeIconSun');
     const themeIconMoon = document.getElementById('themeIconMoon');
     const themeToggleText = document.getElementById('themeToggleText');
     const bodyEl = document.body;
 
-    // Light / Dark Theme Management with Smooth Transition
     function setTheme(mode) {
       if (mode === 'dark') {
         document.documentElement.classList.add('dark');
-        bodyEl.classList.remove('bg-white', 'bg-grid-stn-white');
-        bodyEl.classList.add('bg-[#060a17]', 'bg-grid-cyber-dark');
+        bodyEl.classList.remove('bg-white', 'bg-grid-stn-white', 'text-slate-800');
+        bodyEl.classList.add('bg-[#060a17]', 'bg-grid-cyber-dark', 'text-slate-100');
         themeIconSun.classList.remove('hidden');
         themeIconSun.classList.add('animate-theme-icon');
         themeIconMoon.classList.add('hidden');
         themeToggleText.textContent = 'DARK';
+        themeToggleText.className = 'text-xs font-mono font-semibold select-none text-slate-200';
       } else {
         document.documentElement.classList.remove('dark');
-        bodyEl.classList.remove('bg-[#060a17]', 'bg-grid-cyber-dark');
-        bodyEl.classList.add('bg-white', 'bg-grid-stn-white');
+        bodyEl.classList.remove('bg-[#060a17]', 'bg-grid-cyber-dark', 'text-slate-100');
+        bodyEl.classList.add('bg-white', 'bg-grid-stn-white', 'text-slate-800');
         themeIconMoon.classList.remove('hidden');
         themeIconMoon.classList.add('animate-theme-icon');
         themeIconSun.classList.add('hidden');
         themeToggleText.textContent = 'LIGHT';
+        themeToggleText.className = 'text-xs font-mono font-semibold select-none text-blue-700';
       }
       setTimeout(() => {
         themeIconSun.classList.remove('animate-theme-icon');
@@ -650,23 +615,16 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       setTheme(isDark ? 'light' : 'dark');
     });
 
-    // Operational Clocks Updater
     function updateOperationalClocks() {
       const now = new Date();
-      if (liveUtcClockEl) {
-        liveUtcClockEl.textContent = now.toUTCString().slice(17, 25) + ' UTC';
-      }
-      if (liveLocalClockEl) {
-        liveLocalClockEl.textContent = now.toLocaleTimeString([], { hour12: false });
-      }
+      if (liveUtcClockEl) liveUtcClockEl.textContent = now.toUTCString().slice(17, 25) + ' UTC';
+      if (liveLocalClockEl) liveLocalClockEl.textContent = now.toLocaleTimeString([], { hour12: false });
     }
     setInterval(updateOperationalClocks, 1000);
     updateOperationalClocks();
 
-    // Regex Ticket Parsing Engine
     function parseTickets(rawText) {
       if (!rawText || !rawText.trim()) return [];
-      
       const lines = rawText.split('\n');
       const parsed = [];
       const ticketRegex = /(STNHD-\d+|INC-\d+|CHG-\d+|REQ-\d+|[A-Z]{3,6}-\d+)/i;
@@ -674,10 +632,8 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       lines.forEach(line => {
         const trimmed = line.trim();
         if (!trimmed) return;
-
         const cleaned = trimmed.replace(/^(\d+[\.\)]\s*|[\-\*•]\s*)/, '');
         const match = cleaned.match(ticketRegex);
-
         if (match) {
           const ticketId = match[1].toUpperCase();
           let desc = cleaned.replace(match[0], '').trim();
@@ -688,11 +644,9 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           parsed.push({ id: 'TASK', description: cleaned });
         }
       });
-
       return parsed;
     }
 
-    // Analyst Resolution Helpers
     function getAnalystInfo(selectValue) {
       if (!selectValue || selectValue === 'none') return null;
       return ANALYST_DIRECTORY[selectValue] || { name: selectValue, email: 'analyst@stninc.com', phone: 'N/A' };
@@ -702,12 +656,9 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       const list = [];
       const a1 = getAnalystInfo(outgoing1El.value);
       if (a1) list.push(a1);
-
       if (outgoing2El.value !== 'none') {
         const a2 = getAnalystInfo(outgoing2El.value);
-        if (a2 && a2.name !== (a1 ? a1.name : '')) {
-          list.push(a2);
-        }
+        if (a2 && a2.name !== (a1 ? a1.name : '')) list.push(a2);
       }
       return list;
     }
@@ -716,12 +667,9 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       const list = [];
       const a1 = getAnalystInfo(incoming1El.value);
       if (a1) list.push(a1);
-
       if (incoming2El.value !== 'none') {
         const a2 = getAnalystInfo(incoming2El.value);
-        if (a2 && a2.name !== (a1 ? a1.name : '')) {
-          list.push(a2);
-        }
+        if (a2 && a2.name !== (a1 ? a1.name : '')) list.push(a2);
       }
       return list;
     }
@@ -742,14 +690,12 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       const optionNum = optionNumberEl.value.trim();
       const notes = additionalNotesEl.value.trim();
 
-      // 1. Queue Status line
       if (queueStatus === 'Queue Cleared' && reassignment === 'All tickets reassigned') {
         previewQueueLineEl.textContent = 'Support Queue is empty /All other tickets are reassigned';
       } else {
         previewQueueLineEl.textContent = `Support Queue: ${queueStatus} | Reassignment: ${reassignment}`;
       }
 
-      // 2. Outgoing Analysts
       if (outgoing.length === 1) {
         previewOutgoingSectionEl.innerHTML = `
           <p><span class="font-bold text-slate-900 dark:text-white">Outgoing Analyst:</span> <span class="text-slate-800 dark:text-slate-200">${outgoing[0].name}</span></p>
@@ -766,7 +712,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         previewOutgoingSectionEl.innerHTML = `<p class="text-slate-400 dark:text-slate-500 italic">No outgoing analyst selected</p>`;
       }
 
-      // 3. Tickets Created List
       ticketCountBadgeEl.textContent = `${parsedTickets.length} ticket${parsedTickets.length === 1 ? '' : 's'} detected`;
       if (parsedTickets.length === 0) {
         previewTicketsListEl.innerHTML = `<p class="text-slate-400 dark:text-slate-500 italic font-sans text-xs">No tickets created this shift.</p>`;
@@ -779,7 +724,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         `).join('');
       }
 
-      // 4. Incoming Analysts
       if (incoming.length === 1) {
         previewIncomingSectionEl.innerHTML = `
           <p class="font-bold text-slate-900 dark:text-white">Next Analyst on Shift</p>
@@ -809,7 +753,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         previewIncomingSectionEl.innerHTML = `<p class="text-slate-400 dark:text-slate-500 italic">No incoming analyst selected</p>`;
       }
 
-      // 5. Routing Verification
       previewRoutingInstructionEl.textContent = `Call ${supportNumber}, option ${optionNum} to verify call routing is working properly:`;
       previewRoutingStatusEl.textContent = verified;
       if (verified === 'Yes') {
@@ -820,7 +763,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         previewRoutingStatusEl.className = 'font-semibold text-amber-600 dark:text-amber-400';
       }
 
-      // 6. Additional Notes
       if (notes) {
         previewNotesContainerEl.classList.remove('hidden');
         previewNotesTextEl.textContent = notes;
@@ -829,7 +771,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       }
     }
 
-    // Plain Text Generator for Clipboard & TXT Export
     function generatePlainTextHandoff() {
       const queueStatus = queueStatusEl.value;
       const reassignment = ticketReassignmentEl.value;
@@ -849,18 +790,14 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         text += `Support Queue: ${queueStatus}\nTicket Reassignment: ${reassignment}\n\n`;
       }
 
-      // Outgoing
       if (outgoing.length === 1) {
         text += `Outgoing Analyst: ${outgoing[0].name}\n\n`;
       } else if (outgoing.length >= 2) {
         text += `Outgoing Analysts:\n`;
-        outgoing.forEach((a, i) => {
-          text += `${i + 1}. ${a.name}\n`;
-        });
+        outgoing.forEach((a, i) => { text += `${i + 1}. ${a.name}\n`; });
         text += `\n`;
       }
 
-      // Tickets
       text += `Tickets Created:\n`;
       if (parsedTickets.length === 0) {
         text += `None\n\n`;
@@ -871,7 +808,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         text += `\n`;
       }
 
-      // Incoming
       if (incoming.length === 1) {
         text += `Next Analyst on Shift:\n`;
         text += `Name: ${incoming[0].name}\n`;
@@ -886,69 +822,56 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         });
       }
 
-      // Routing
       text += `Call ${supportNumber}, option ${optionNum} to verify call routing is working properly.\n\n`;
       text += `Verified and working: ${verified}\n`;
 
       if (notes) {
         text += `\nAdditional Notes:\n${notes}\n`;
       }
-
       return text;
     }
 
-    // Toast Notification Display
     function showToast(msg) {
       toastMessage.textContent = msg;
       toastNotification.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
       toastNotification.classList.add('opacity-100', 'translate-y-0');
-
       setTimeout(() => {
         toastNotification.classList.remove('opacity-100', 'translate-y-0');
         toastNotification.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
       }, 2600);
     }
 
-    // Ultra-reliable STN Logo Resolver for PDF
-    // Attempts 1) Image element canvas export, 2) Fetch as blob, 3) Canvas vector emblem fallback
+    // Logo Resolver referencing logo.jpg
     function getLoadedLogoDataUrl() {
       return new Promise((resolve) => {
-        const img = document.getElementById('portalLogoImg') || document.getElementById('stn-logo');
+        const img = document.getElementById('portalLogoImg');
 
-        // Helper: Generate clean, sharp STN circular logo badge on canvas
         const generateVectorEmblemDataUrl = () => {
           try {
             const canvas = document.createElement('canvas');
             canvas.width = 400;
             canvas.height = 400;
             const ctx = canvas.getContext('2d');
-            
-            // White clean background
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, 400, 400);
 
-            // Outer Blue Orbit Ring (Matching STN emblem brand)
             ctx.strokeStyle = '#2b58a3';
             ctx.lineWidth = 14;
             ctx.beginPath();
             ctx.arc(200, 200, 165, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Clear horizontal text slit
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(40, 130, 320, 140);
 
-            // Bold "STN" lettering with blue inlay and black outer strokes
             ctx.font = '900 130px "Inter", "Arial Black", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
-            // Black letter contour
             ctx.lineWidth = 16;
             ctx.strokeStyle = '#0f172a';
             ctx.strokeText('STN', 200, 200);
 
-            // Blue inner letter core
             ctx.fillStyle = '#2b58a3';
             ctx.fillText('STN', 200, 200);
 
@@ -967,15 +890,12 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
-            return resolve(dataUrl);
+            return resolve(canvas.toDataURL('image/jpeg', 0.95));
           } catch (err) {
-            console.warn('Canvas tainted when exporting STN.jpg, falling back to vector emblem:', err);
             return resolve(generateVectorEmblemDataUrl());
           }
         }
 
-        // Secondary attempt: load via new Image() with crossOrigin
         const fallbackImg = new Image();
         fallbackImg.crossOrigin = 'Anonymous';
         fallbackImg.onload = function () {
@@ -995,15 +915,12 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         fallbackImg.onerror = function () {
           resolve(generateVectorEmblemDataUrl());
         };
-        fallbackImg.src = 'STN.jpg';
+        fallbackImg.src = 'logo.jpg';
       });
     }
 
-    // Direct vector drawer on jsPDF document in case raster images are completely restricted
     function drawDirectVectorLogoOnPdf(doc, x, y, size) {
       doc.saveGraphicsState();
-      
-      // Background white badge container
       doc.setFillColor(255, 255, 255);
       doc.setDrawColor(203, 213, 225);
       doc.setLineWidth(0.3);
@@ -1013,31 +930,23 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       const cy = y + (size / 2);
       const r = (size / 2) - 2;
 
-      // Orbit blue ring
       doc.setDrawColor(43, 88, 163);
       doc.setLineWidth(1.1);
       doc.circle(cx, cy, r, 'S');
 
-      // Clear horizontal band
       doc.setFillColor(255, 255, 255);
       doc.rect(x + 1, cy - (size * 0.22), size - 2, size * 0.44, 'F');
 
-      // "STN" text
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(size * 0.52);
       doc.setTextColor(15, 23, 42);
       doc.text('STN', cx, cy + (size * 0.16), { align: 'center' });
-
       doc.restoreGraphicsState();
     }
 
     downloadPdfBtn.addEventListener('click', async () => {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
       const logoBase64 = await getLoadedLogoDataUrl();
 
@@ -1083,7 +992,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         y = margin + 8;
       }
 
-      // ===== COVER / HEADER WITH GUARANTEED STN LOGO =====
       const logoSize = 20;
       let logoDrawn = false;
 
@@ -1092,7 +1000,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           doc.addImage(logoBase64, 'JPEG', margin, y, logoSize, logoSize, undefined, 'FAST');
           logoDrawn = true;
         } catch (e) {
-          console.warn('PDF addImage failed, using vector logo drawer fallback:', e);
+          console.warn('PDF addImage fallback:', e);
         }
       }
 
@@ -1117,7 +1025,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       doc.setTextColor(100, 116, 139);
       doc.text(`Ref: NOC-HO-${dateStringIso} | Generated: ${today.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`, textStartX, y + 17);
 
-      // Date box
       doc.setFillColor(241, 245, 249);
       doc.roundedRect(pageWidth - margin - 48, y, 48, 17, 2, 2, 'F');
       doc.setFont('helvetica', 'bold');
@@ -1130,13 +1037,11 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       y += 27;
 
-      // Divider line
       doc.setDrawColor(203, 213, 225);
       doc.setLineWidth(0.4);
       doc.line(margin, y, pageWidth - margin, y);
       y += 6;
 
-      // ===== ANALYSTS GRID =====
       const colWidth = (printableWidth - 6) / 2;
       const outX = margin;
       const inX = margin + colWidth + 6;
@@ -1146,7 +1051,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       checkPageBreak(boxHeight + 6);
 
-      // Outgoing Analysts Card
+      // Outgoing Card
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(203, 213, 225);
       doc.roundedRect(outX, y, colWidth, boxHeight, 2, 2, 'FD');
@@ -1178,7 +1083,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         });
       }
 
-      // Incoming Analysts Card
+      // Incoming Card
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(203, 213, 225);
       doc.roundedRect(inX, y, colWidth, boxHeight, 2, 2, 'FD');
@@ -1212,7 +1117,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       y += boxHeight + 6;
 
-      // QUEUE & REASSIGNMENT STATUS
+      // Status Bar
       checkPageBreak(22);
       doc.setFillColor(241, 245, 249);
       doc.roundedRect(margin, y, printableWidth, 14, 2, 2, 'F');
@@ -1236,7 +1141,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       y += 20;
 
-      // TICKETS CREATED TABLE
+      // Tickets List
       checkPageBreak(30);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
@@ -1295,7 +1200,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       y += 4;
 
-      // CALL ROUTING VERIFICATION
+      // Routing Box
       checkPageBreak(28);
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(203, 213, 225);
@@ -1325,7 +1230,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
 
       y += 28;
 
-      // ADDITIONAL NOTES
+      // Notes
       if (notes) {
         const splitNotes = doc.splitTextToSize(notes, printableWidth - 8);
         const notesBoxHeight = 12 + (splitNotes.length * 4.5);
@@ -1348,7 +1253,7 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         y += notesBoxHeight + 6;
       }
 
-      // FOOTER & PAGINATION
+      // Footers
       const totalPages = doc.internal.getNumberOfPages();
       for (let p = 1; p <= totalPages; p++) {
         doc.setPage(p);
@@ -1363,13 +1268,11 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         doc.text(`Page ${p} of ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
       }
 
-      // Download Named PDF
       const finalFileName = `STN_NOC_SOC_Shift_Handoff_${dateStringIso}.pdf`;
       doc.save(finalFileName);
       showToast(`Downloaded ${finalFileName}`);
     });
 
-    // Copy Handoff to Clipboard Handler
     copyHandoffBtn.addEventListener('click', () => {
       const text = generatePlainTextHandoff();
       hiddenClipboardBuffer.value = text;
@@ -1388,7 +1291,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       }
     });
 
-    // Download Plain Text Handoff Handler
     downloadTxtBtn.addEventListener('click', () => {
       const text = generatePlainTextHandoff();
       const today = new Date();
@@ -1407,7 +1309,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       showToast('Downloaded text handoff file');
     });
 
-    // Real-Time Form Event Listeners
     [
       queueStatusEl, ticketReassignmentEl,
       outgoing1El, outgoing2El,
@@ -1419,14 +1320,12 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
       element.addEventListener('change', updateLivePreview);
     });
 
-    // Initial render - Defaults to clean STN White & Cobalt Blue Theme
     window.addEventListener('DOMContentLoaded', () => {
-      setTheme('light');
+      setTheme('dark');
       updateLivePreview();
       initNetworkTopologyAnimation();
     });
 
-    // Network Topology & Cybersecurity Mesh Animation Engine
     function initNetworkTopologyAnimation() {
       const canvas = document.getElementById('cyberNetworkCanvas');
       if (!canvas) return;
@@ -1440,7 +1339,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         height = canvas.height = window.innerHeight;
       });
 
-      // Node count tuned for continuous 60FPS background performance
       const nodeCount = Math.min(52, Math.floor((width * height) / 22000));
       const nodes = [];
       const connectionDist = 160;
@@ -1453,7 +1351,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           this.vx = (Math.random() - 0.5) * 0.65;
           this.vy = (Math.random() - 0.5) * 0.65;
           this.radius = Math.random() * 2.2 + 1.8;
-          // Specialized node types: 0 = regular node, 1 = firewall/shield, 2 = cluster hub
           this.type = Math.random() > 0.85 ? 2 : (Math.random() > 0.7 ? 1 : 0);
           this.pulse = Math.random() * Math.PI * 2;
         }
@@ -1475,17 +1372,14 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           ctx.arc(this.x, this.y, this.radius + pSize, 0, Math.PI * 2);
 
           if (this.type === 2) {
-            // Cluster Core (STN Cobalt Blue in Light Mode)
             ctx.fillStyle = isDark ? '#06b6d4' : '#1d4ed8';
             ctx.shadowColor = isDark ? 'rgba(6, 182, 212, 0.8)' : 'rgba(29, 78, 216, 0.4)';
             ctx.shadowBlur = isDark ? 10 : 5;
           } else if (this.type === 1) {
-            // Firewall / Security Node (STN Dark Midnight in Light Mode)
             ctx.fillStyle = isDark ? '#10b981' : '#0f172a';
             ctx.shadowColor = isDark ? 'rgba(16, 185, 129, 0.8)' : 'rgba(15, 23, 42, 0.25)';
             ctx.shadowBlur = isDark ? 8 : 4;
           } else {
-            // Standard Host
             ctx.fillStyle = isDark ? 'rgba(148, 163, 184, 0.85)' : 'rgba(100, 116, 139, 0.55)';
             ctx.shadowBlur = 0;
           }
@@ -1494,12 +1388,10 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         }
       }
 
-      // Initialize topology nodes
       for (let i = 0; i < nodeCount; i++) {
         nodes.push(new TopologyNode());
       }
 
-      // Cybersecurity Packet Pulses traveling between nodes
       class DataPacket {
         constructor(from, to) {
           this.from = from;
@@ -1527,12 +1419,10 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
         }
       }
 
-      // Main continuous animation loop
       function animateTopology() {
         const isDark = document.documentElement.classList.contains('dark');
         ctx.clearRect(0, 0, width, height);
 
-        // Draw links between nearby topology nodes
         for (let i = 0; i < nodes.length; i++) {
           nodes[i].update();
           nodes[i].draw(isDark);
@@ -1551,13 +1441,11 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
               if (isDark) {
                 ctx.strokeStyle = `rgba(30, 58, 138, ${alpha * 0.55})`;
               } else {
-                // Subtle STN brand blue link line on white background
                 ctx.strokeStyle = `rgba(29, 78, 216, ${alpha * 0.18})`;
               }
               ctx.lineWidth = 1;
               ctx.stroke();
 
-              // Spawn occasional data packets
               if (Math.random() < 0.0007 && packets.length < 18) {
                 packets.push(new DataPacket(nodes[i], nodes[j]));
               }
@@ -1565,7 +1453,6 @@ STNHD-98222 New User Access Request – Cluster & Datapod Group</textarea>
           }
         }
 
-        // Draw and update active security data packets
         for (let k = packets.length - 1; k >= 0; k--) {
           const packet = packets[k];
           packet.update();
